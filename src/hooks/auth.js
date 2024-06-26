@@ -99,6 +99,10 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         window.location.pathname = '/login'
     }
 
+    const permissions = user?.roles.reduce((acc, role) => {
+        return [...acc, ...role.permissions.map(permission => permission.name)]
+    }, []) || []
+    // console.log(user?.roles)
     useEffect(() => {
         if (middleware === 'guest' && redirectIfAuthenticated && user)
             router.push(redirectIfAuthenticated)
@@ -112,6 +116,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     return {
         user,
+        role: user?.roles[0]?.name,
+        permissions,
         register,
         login,
         forgotPassword,
